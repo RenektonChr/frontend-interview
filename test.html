@@ -7,16 +7,20 @@
 </head>
 <body>
   <button id="btn">按钮</button>
-  <script src="./JavaScript/Q1.debounce.js"></script>
+  <script src="./JavaScript/Q4.curry.js"></script>
   <script>
-    let oBtn = document.getElementById('btn');
-    oBtn.onclick = debounce(function() {
-      console.log(111);
-    }, 1000, true);
+    // let oBtn = document.getElementById('btn');
+    // oBtn.onclick = debounce(function() {
+    //   console.log(111);
+    // }, 1000, true);
 
-    window.onresize = throttle(function() {
-      console.log('resize');
-    }, 100)
+    // window.onresize = throttle(function() {
+    //   console.log('resize');
+    // }, 100)
+
+    let addCurry = currying(add);
+    console.log(addCurry)
+    console.log(addCurry(1)(2)(3)(4, 5)());
   </script>
 </body>
 </html>
