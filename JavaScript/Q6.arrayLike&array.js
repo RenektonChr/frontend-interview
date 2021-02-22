@@ -11,6 +11,11 @@
  *    调用数组方法
  * 
  * 区别：类数组是简单对象，它的原型关系与数组不同。
+ * 
+ * 类数组转换为数组：
+ *    转换方法：
+ *      1. Array.from()
+ *      2. Array.prototype.slice.call()
  */
 
 let arrayLike = {
@@ -18,3 +23,12 @@ let arrayLike = {
 };
 
 console.log(arrayLike instanceof Array);
+console.log(arrayLike.__proto__.constructor === Array);
+console.log(arrayLike.toString());
+console.log(arrayLike.valueOf());
+
+let array = [];
+console.log(array instanceof Array);
+console.log(array.__proto__.constructor === Array);
+console.log(array.toString());
+console.log(array.valueOf());
