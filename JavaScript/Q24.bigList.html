@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <button id="btn1">过期设置（暴力法）</button>
+  <button id="btn2">过期设置（innerHTML）</button>
+  <ul id="wrap"></ul>
+  <script>
+    /*
+      a)在不使用vue、react的前提下写代码解决一下问题
+        一个List页面上，含有1000个条目的待办列表，现其中100项在同一时间达到了过期时间，
+        需要在对应项的text-node里添加“已过期”文字。需要尽可能减少dom重绘次数以提升性能。
+      b)尝试使用vue或react解决上述问题
+    */
+
+    // 原生方式实现
+
+    let start = new Date().getTime();
+    let $ul = document.getElementById('wrap');
+
+    // 创建文档片段，降低dom操作，只做一次替换操作。
+    let el = document.createDocumentFragment();
+    let allKeys = [];
+    // 这里的for循环只是对文档碎片进行的操作，并没有对实际的dom进行操作，所以不会触发浏览器的回流，提高了性能。
+    for(let i = 0; i < 100; i++) {
+      let li = document.createElement('li');
+      // 为每一个li元素设置key属性
+      li.dataset.key = i;
+      li.innerHTML = i;
+      el.appendChild(i);
+      allKeys(i);
+    }
+    // 这里执行的是dom操作
+    $ul.appendChild(el);
+
+    // 生成过期项
+    function getExpireKeys() {
+      let keys = [];
+      while(keys.length < 100) {
+        let randomKey = Math.floor(Math.random() * 1000)
+        if(keys.indexOf(randomKey) === -1) {
+          keys.push(randomKey)
+        }else {
+          continue
+        }
+      }
+      return keys;
+    }
+
+    // 暴力方法，逐项遍历
+    document.getElementById('btn1').onclick = function() {
+      let expireKeys = getExpireKeys();
+      let children = $ul.children;
+      let start = Date.now();
+      for(let i = 0; i < expireKeys.length; i++) {
+        const element = document.querySelector(`data-key="${expireKeys[i]}"`);
+        element.innerHTML = element.innerHTML + '已过期'
+      }
+    }
+
+    // 模板字符串innerHTML替换
+    document.getElementById('btn2').onclick = function() {
+      let expireKeys = getExpireKeys();
+      const items = [];
+      for (let i = 0; i < allKeys.length; i++) {
+        item.push(`<li>${allKeys[i]} ${expireKeys.indexOf(allKeys[i]) !== -1 ? '已过期' : ''}<li>`)
+      }
+      $ul.innerHTML = items.join('');
+    }
+  </script>
+</body>
+
+</html>
